@@ -2,11 +2,11 @@
 
 The purpose of this project is testing WindowServer.app development. X is an optional component for compatibility, installed on demand when an app needs it. The [WindowServer.app development plan](https://pkgdemon.github.io/WindowServer-Plan.html?v=20260514) is driving this work.
 
+libdispatch and the blocks runtime come from the NextBSD base system, which may become a factor in this work. [Building GNUstep core libraries on NextBSD](https://github.com/pkgdemon/pkgdemon.github.io/wiki/Building-GNUstep--Core-Libraries-on-NextBSD) covers the known problem with main queue wakeups and keeps a stock libdispatch build as a backup.
+
 Scripts that build the GNUstep core libraries and a desktop of GNUstep apps on NextBSD, using only NextBSD packages.
 
 The libraries are stock upstream sources, from the latest commit on each default branch. Nothing is pinned, so what you build changes as upstream does.
-
-libdispatch and the blocks runtime aren't built here. These scripts use the ones already in NextBSD's base system, `libsystem_dispatch` and `libsystem_blocks`, which have Mach enabled. That is an experiment: see [Known problem](https://github.com/pkgdemon/pkgdemon.github.io/wiki/Building-GNUstep--Core-Libraries-on-NextBSD#known-problem-main-queue-wakeups) before relying on it. A [stock libdispatch build](https://github.com/pkgdemon/pkgdemon.github.io/wiki/Building-GNUstep--Core-Libraries-on-NextBSD#backup-stock-libdispatch) is kept at the end of the guide as a backup.
 
 ## Packages
 
