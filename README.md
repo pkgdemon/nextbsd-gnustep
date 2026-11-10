@@ -6,12 +6,33 @@ The libraries are stock upstream sources, from the latest commit on each default
 
 ## Packages
 
-Install these first, as root. `git` comes from `NextBSD-toolchain`, so you need them before you can clone this repository.
+Install these first, as root. `git` comes from `NextBSD-toolchain`, so you need it before you can clone this repository.
+
+Needed for WindowServer.app development:
 
 ```sh
 pkg install -y NextBSD-toolchain NextBSD-mesa NextBSD-gnustep-support
-pkg install -y NextBSD-xlibre NextBSD-xlibs NextBSD-mesa-x11 NextBSD-printing-support
 ```
+
+Optional X libraries:
+
+```sh
+pkg install -y NextBSD-xlibre NextBSD-xlibs NextBSD-mesa-x11
+```
+
+Optional CUPS for printing support:
+
+```sh
+pkg install -y NextBSD-printing-support
+```
+
+| Package | Provides |
+|---|---|
+| `NextBSD-toolchain` | clang and lld 19.1.7, gmake, pkgconf, git, CMake, autoconf, automake, libtool |
+| `NextBSD-xlibs` | X client libraries in `/usr/X11` |
+| `NextBSD-mesa`, `NextBSD-mesa-x11` | EGL, OpenGL, GLX |
+| `NextBSD-gnustep-support` | jpeg-turbo, libpng, libtiff, giflib, GnuTLS, cairo, libsndfile, libao, SQLite, flite, FFmpeg |
+| `NextBSD-printing-support` | Apple's CUPS, used by libs-gui for printing |
 
 Then clone this repository:
 
