@@ -1,6 +1,6 @@
 # nextbsd-gnustep
 
-The purpose of this project is testing WindowServer.app development. X is an optional component for compatibility, installed on demand when an app needs it. See the [WindowServer plan](https://pkgdemon.github.io/WindowServer-Plan.html?v=20260514).
+The purpose of this project is testing WindowServer.app development. X is an optional component for compatibility, installed on demand when an app needs it. The [WindowServer.app development plan](https://pkgdemon.github.io/WindowServer-Plan.html?v=20260514) is driving this work.
 
 Scripts that build the GNUstep core libraries and a desktop of GNUstep apps on NextBSD, using only NextBSD packages.
 
