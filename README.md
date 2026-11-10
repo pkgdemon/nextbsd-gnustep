@@ -41,6 +41,7 @@ pkg install -y NextBSD-printing-support
 Then clone this repository:
 
 ```sh
+cd /private/tmp
 git clone https://github.com/pkgdemon/nextbsd-gnustep.git
 cd nextbsd-gnustep
 ```
