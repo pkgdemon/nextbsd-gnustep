@@ -51,7 +51,7 @@ Run them in this order:
 
 | Script | Run as | What it does |
 |---|---|---|
-| `build-core-libs.sh` | root | Clones and builds the core libraries into `/System/Library`, and installs DejaVu fonts |
+| `build-core-libs.sh` | root | Clones and builds the core libraries into `/System/Library` |
 | `install-apps.sh` | normal user | Builds the apps and theme into your home folder and turns on the theme |
 
 All of them can be re-run. Existing clones are updated with `git pull --ff-only`, and the script stops at the first failure.

@@ -137,16 +137,3 @@ make_install
 echo "==> Building libs-av"
 cd "$SOURCES/libs-av"
 make_install
-
-# fontconfig ignores the bitmap fonts in NextBSD-xlibre, and with no scalable
-# font apps start with tiny, blank windows.
-echo "==> Installing fonts"
-mkdir -p /System/Library/Fonts
-if [ ! -f /System/Library/Fonts/DejaVuSansMono.ttf ]; then
-    FONT_TMP=$(mktemp -d)
-    fetch -o "$FONT_TMP/dejavu.tar.bz2" https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.tar.bz2
-    tar -xjf "$FONT_TMP/dejavu.tar.bz2" -C "$FONT_TMP"
-    cp "$FONT_TMP"/dejavu-fonts-ttf-2.37/ttf/*.ttf /System/Library/Fonts/
-    rm -rf "$FONT_TMP"
-fi
-fc-cache -f /System/Library/Fonts
