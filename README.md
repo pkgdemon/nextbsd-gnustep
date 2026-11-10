@@ -1,5 +1,7 @@
 # nextbsd-gnustep
 
+The purpose of this project is testing WindowServer.app development. X is an optional component for compatibility, installed on demand when an app needs it.
+
 Scripts that build the GNUstep core libraries and a desktop of GNUstep apps on NextBSD, using only NextBSD packages.
 
 The libraries are stock upstream sources, from the latest commit on each default branch. Nothing is pinned, so what you build changes as upstream does. libdispatch and the blocks runtime come from the NextBSD base system.
