@@ -38,9 +38,7 @@ clone_or_pull() {
     fi
 }
 
-# nextbsd-theme is a private repository, so it clones over SSH.
-clone_or_pull git@github.com:pkgdemon/nextbsd-theme.git
-for repo in apps-terminal Finder apps-dock apps-innerspace; do
+for repo in nextbsd-theme apps-terminal Finder apps-dock apps-innerspace; do
     clone_or_pull "https://github.com/pkgdemon/$repo.git"
 done
 

@@ -56,8 +56,6 @@ Sources are cloned into `/Developer/Sources`.
 
 Repositories are cloned into your home folder. Apps install to `~/Applications`, the theme to `~/Library/Themes`, and its fonts to `~/Library/Fonts`.
 
-`nextbsd-theme` is a private repository cloned over SSH, so the user running `install-apps.sh` needs a GitHub SSH key with access to it.
-
 WindowManager is only built with `./install-apps.sh --with-windowmanager`. You only need it for programs that aren't GNUstep apps, such as `xterm`.
 
 ## Session setup
