@@ -4,13 +4,28 @@ Scripts that build the GNUstep core libraries and a desktop of GNUstep apps on N
 
 The libraries are stock upstream sources, from the latest commit on each default branch. Nothing is pinned, so what you build changes as upstream does. libdispatch and the blocks runtime come from the NextBSD base system.
 
+## Packages
+
+Install these first, as root. `git` comes from `NextBSD-toolchain`, so you need them before you can clone this repository.
+
+```sh
+pkg install -y NextBSD-toolchain NextBSD-mesa NextBSD-gnustep-support
+pkg install -y NextBSD-xlibre NextBSD-xlibs NextBSD-mesa-x11 NextBSD-printing-support
+```
+
+Then clone this repository:
+
+```sh
+git clone https://github.com/pkgdemon/nextbsd-gnustep.git
+cd nextbsd-gnustep
+```
+
 ## Scripts
 
 Run them in this order:
 
 | Script | Run as | What it does |
 |---|---|---|
-| `install-packages.sh` | root | Installs the NextBSD packages |
 | `build-core-libs.sh` | root | Clones and builds the core libraries into `/System/Library`, and installs DejaVu fonts |
 | `install-apps.sh` | normal user | Builds the apps and theme into your home folder and turns on the theme |
 
@@ -18,7 +33,6 @@ All of them can be re-run. Existing clones are updated with `git pull --ff-only`
 
 ```sh
 # as root
-./install-packages.sh
 ./build-core-libs.sh
 
 # as your normal user

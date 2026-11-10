@@ -1,6 +1,6 @@
 #!/bin/sh
 # Clone, build and install the GNUstep core libraries into /System/Library.
-# Run as root, after install-packages.sh.
+# Run as root, after installing the packages listed in README.md.
 #
 # Commands run one per line rather than joined with &&, because set -e does
 # not stop the script when a command other than the last in a && list fails.
