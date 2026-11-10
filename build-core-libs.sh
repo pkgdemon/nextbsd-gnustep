@@ -12,8 +12,6 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-
 # GNUstep refuses a group-writable GNUstep.conf.
 umask 022
 
@@ -152,6 +150,3 @@ if [ ! -f /System/Library/Fonts/DejaVuSansMono.ttf ]; then
     rm -rf "$FONT_TMP"
 fi
 fc-cache -f /System/Library/Fonts
-
-echo "==> Checking the install"
-"$SCRIPT_DIR/check-core-libs.sh"

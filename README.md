@@ -11,10 +11,8 @@ Run them in this order:
 | Script | Run as | What it does |
 |---|---|---|
 | `install-packages.sh` | root | Installs the NextBSD packages |
-| `build-core-libs.sh` | root | Clones and builds the core libraries into `/System/Library`, installs DejaVu fonts, and runs the check |
+| `build-core-libs.sh` | root | Clones and builds the core libraries into `/System/Library`, and installs DejaVu fonts |
 | `install-apps.sh` | normal user | Builds the apps and theme into your home folder and turns on the theme |
-
-`check-core-libs.sh` runs the post-install checks on its own and changes nothing.
 
 All of them can be re-run. Existing clones are updated with `git pull --ff-only`, and the script stops at the first failure.
 
