@@ -55,23 +55,44 @@ source_gnustep() {
     export GNUSTEP_INSTALLATION_DOMAIN=SYSTEM
 }
 
+# Known-good commits. Each clone is checked out at its commit, so the build
+# doesn't change as upstream does.
+pin() {
+    case "$1" in
+        tools-make)                 echo 4e31a0310df5 ;;
+        libobjc2)                   echo c9f4002ade04 ;;
+        libs-base)                  echo 5bda52220a6d ;;
+        libs-corebase)              echo e89ff1f5b878 ;;
+        libs-gui)                   echo 8f804fd520c6 ;;
+        libs-back)                  echo bbcc3de7cab6 ;;
+        libs-av)                    echo 26566e25043f ;;
+        swift-corelibs-libdispatch) echo 95f592ab637c ;;
+    esac
+}
+
+# Clone a repository into $SOURCES, or fetch an existing clone, then check out
+# its pinned commit.
+clone_pinned() {
+    url=$1
+    dir="$SOURCES/$(basename "$url" .git)"
+    if [ -d "$dir/.git" ]; then
+        git -C "$dir" fetch origin
+    else
+        git clone "$url" "$dir"
+    fi
+    git -C "$dir" checkout -q "$(pin "$(basename "$dir")")"
+}
+
 echo "==> Cloning sources"
 mkdir -p "$SOURCES"
 # The Mach sed below edits libdispatch's checkout, so put it back first or
-# git pull --ff-only refuses to update it.
+# git checkout refuses to move to another commit.
 if [ -d "$SOURCES/swift-corelibs-libdispatch/.git" ]; then
     git -C "$SOURCES/swift-corelibs-libdispatch" checkout -- .
-    git -C "$SOURCES/swift-corelibs-libdispatch" pull --ff-only
-else
-    git clone https://github.com/apple/swift-corelibs-libdispatch.git \
-        "$SOURCES/swift-corelibs-libdispatch"
 fi
+clone_pinned https://github.com/apple/swift-corelibs-libdispatch.git
 for lib in tools-make libobjc2 libs-base libs-corebase libs-gui libs-back libs-av; do
-    if [ -d "$SOURCES/$lib/.git" ]; then
-        git -C "$SOURCES/$lib" pull --ff-only
-    else
-        git clone "https://github.com/gnustep/$lib.git" "$SOURCES/$lib"
-    fi
+    clone_pinned "https://github.com/gnustep/$lib.git"
 done
 
 echo "==> Building libdispatch"
