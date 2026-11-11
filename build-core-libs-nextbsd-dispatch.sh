@@ -74,7 +74,7 @@ pin() {
         libobjc2)                   echo c9f4002ade04 ;;
         libs-base)                  echo 5bda52220a6d ;;
         libs-corebase)              echo e89ff1f5b878 ;;
-        libs-gui)                   echo 8f804fd520c6 ;;
+        libs-gui)                   echo 1f8d40867cb4 ;;
         libs-back)                  echo bbcc3de7cab6 ;;
         libs-av)                    echo 26566e25043f ;;
         swift-corelibs-libdispatch) echo 95f592ab637c ;;
