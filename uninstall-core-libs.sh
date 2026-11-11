@@ -1,6 +1,7 @@
 #!/bin/sh
-# Remove the GNUstep System Domain installed by the build scripts, and the
-# sources they cloned into /Developer/Sources.
+# Remove the GNUstep System Domain installed by the build scripts, the
+# sources they cloned into /Developer/Sources, and the link-only symlinks in
+# /Developer/Link.
 # Run as root. A shell version of the uninstall target in gershwin-developer's
 # Makefile.
 #
@@ -38,8 +39,11 @@ else
     echo "GNUstep appears to be already uninstalled. Nothing was removed."
 fi
 
-# The sources cloned by the build scripts.
-if [ -d /Developer/Sources ]; then
-    rm -rf /Developer/Sources
-    echo "Removed /Developer/Sources"
-fi
+# The sources cloned by the build scripts, and the link-only symlinks made by
+# build-core-libs-nextbsd-dispatch.sh.
+for dir in /Developer/Sources /Developer/Link; do
+    if [ -d "$dir" ]; then
+        rm -rf "$dir"
+        echo "Removed $dir"
+    fi
+done

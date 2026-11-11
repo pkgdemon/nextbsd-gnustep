@@ -98,7 +98,7 @@ Run this as root:
 ./uninstall-core-libs.sh
 ```
 
-It's a shell version of the `uninstall` target in [gershwin-developer's Makefile](https://github.com/gershwin-desktop/gershwin-developer/blob/main/Makefile). On NextBSD it removes `/System/Applications` and everything in `/System/Library` except `Caches`, `Extensions`, `Filesystems`, `LaunchAgents` and `LaunchDaemons`, which belong to the base system. The Makefile keeps only `Caches`, `Extensions` and `LaunchDaemons`; the other two were added because NextBSD installs into them. It also removes the sources in `/Developer/Sources`.
+It's a shell version of the `uninstall` target in [gershwin-developer's Makefile](https://github.com/gershwin-desktop/gershwin-developer/blob/main/Makefile). On NextBSD it removes `/System/Applications` and everything in `/System/Library` except `Caches`, `Extensions`, `Filesystems`, `LaunchAgents` and `LaunchDaemons`, which belong to the base system. The Makefile keeps only `Caches`, `Extensions` and `LaunchDaemons`; the other two were added because NextBSD installs into them. It also removes the sources in `/Developer/Sources` and the link-only symlinks in `/Developer/Link`.
 
 ## Guide
 
