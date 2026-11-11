@@ -55,44 +55,32 @@ source_gnustep() {
     export GNUSTEP_INSTALLATION_DOMAIN=SYSTEM
 }
 
-# Known-good commits. Each clone is checked out at its commit, so the build
-# doesn't change as upstream does.
-pin() {
-    case "$1" in
-        tools-make)                 echo 4e31a0310df5 ;;
-        libobjc2)                   echo c9f4002ade04 ;;
-        libs-base)                  echo 5bda52220a6d ;;
-        libs-corebase)              echo e89ff1f5b878 ;;
-        libs-gui)                   echo 1f8d40867cb4 ;;
-        libs-back)                  echo bbcc3de7cab6 ;;
-        libs-av)                    echo 26566e25043f ;;
-        swift-corelibs-libdispatch) echo 95f592ab637c ;;
-    esac
-}
-
-# Clone a repository into $SOURCES, or fetch an existing clone, then check out
-# its pinned commit.
-clone_pinned() {
+# Clone a repository into $SOURCES, or bring an existing clone up to date
+# with its default branch. The checkout goes back to the branch first, since
+# an older run may have left it at a fixed commit.
+clone_or_pull() {
     url=$1
     dir="$SOURCES/$(basename "$url" .git)"
     if [ -d "$dir/.git" ]; then
         git -C "$dir" fetch origin
+        branch=$(git -C "$dir" symbolic-ref --short refs/remotes/origin/HEAD)
+        git -C "$dir" checkout -q "${branch#origin/}"
+        git -C "$dir" pull --ff-only
     else
         git clone "$url" "$dir"
     fi
-    git -C "$dir" checkout -q "$(pin "$(basename "$dir")")"
 }
 
 echo "==> Cloning sources"
 mkdir -p "$SOURCES"
 # The Mach sed below edits libdispatch's checkout, so put it back first or
-# git checkout refuses to move to another commit.
+# git refuses to update it.
 if [ -d "$SOURCES/swift-corelibs-libdispatch/.git" ]; then
     git -C "$SOURCES/swift-corelibs-libdispatch" checkout -- .
 fi
-clone_pinned https://github.com/apple/swift-corelibs-libdispatch.git
+clone_or_pull https://github.com/apple/swift-corelibs-libdispatch.git
 for lib in tools-make libobjc2 libs-base libs-corebase libs-gui libs-back libs-av; do
-    clone_pinned "https://github.com/gnustep/$lib.git"
+    clone_or_pull "https://github.com/gnustep/$lib.git"
 done
 
 echo "==> Building libdispatch"

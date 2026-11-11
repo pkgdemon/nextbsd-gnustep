@@ -6,7 +6,7 @@ libdispatch and the blocks runtime come from the NextBSD base system, which may 
 
 Scripts that build the GNUstep core libraries on NextBSD, using only NextBSD packages. For the desktop apps, see [nextbsd-gnustep-apps](https://github.com/pkgdemon/nextbsd-gnustep-apps).
 
-The libraries are stock upstream sources, pinned to known-good commits. The commits are listed in the `pin` function at the top of each build script.
+The libraries are stock upstream sources, from the latest commit on each default branch. Nothing is pinned, so what you build changes as upstream does.
 
 ## Packages
 
@@ -70,7 +70,7 @@ Both have the same known problem with main queue wakeups. With the stock libdisp
 
 Don't mix the two on one machine. The NextBSD script stops if a stock libdispatch is already in `/System/Library`, because it would be linked instead of NextBSD's.
 
-Each script clones and builds the core libraries into `/System/Library`. It can be re-run. Existing clones are fetched and checked out at their pinned commit, and the script stops at the first failure.
+Each script clones and builds the core libraries into `/System/Library`. It can be re-run. Existing clones are updated to the latest commit on their default branch, and the script stops at the first failure.
 
 ### Core libraries
 
