@@ -92,7 +92,7 @@ Sources are cloned into `/Developer/Sources`.
 
 ## WindowServer (proof of concept)
 
-[WindowServer](https://github.com/pkgdemon/apps-windowserver) is a native NextBSD display server, in the style of macOS's. GNUstep apps draw their own windows and WindowServer composites them, with no X11 in between. Apps talk to it through the `nextbsd` backend, which comes from a fork of libs-back, [pkgdemon/libs-back](https://github.com/pkgdemon/libs-back). It installs as `libgnustep-nextbsd` beside the stock X11 backend, and the `GSBackend` default picks one. libs-base and libs-gui are unchanged.
+[WindowServer](https://github.com/nextbsd/apps-windowserver) is a native NextBSD display server, in the style of macOS's. GNUstep apps draw their own windows and WindowServer composites them, with no X11 in between. Apps talk to it through the `nextbsd` backend, which comes from a fork of libs-back, [nextbsd/libs-back](https://github.com/nextbsd/libs-back). It installs as `libgnustep-nextbsd` beside the stock X11 backend, and the `GSBackend` default picks one. libs-base and libs-gui are unchanged.
 
 It's an early proof of concept. Headless mode has been tested; on a real display it hasn't run yet.
 
@@ -149,7 +149,7 @@ Terminal, Workspace, InnerSpace and the Dock (DockWM) run on it. WindowManager.a
 
 ### Booting to the login panel
 
-`build-windowserver.sh` also builds [loginwindow](https://github.com/pkgdemon/apps-loginwindow), the graphical login, but doesn't turn it on. As root:
+`build-windowserver.sh` also builds [loginwindow](https://github.com/nextbsd/apps-loginwindow), the graphical login, but doesn't turn it on. As root:
 
 ```sh
 ./enable-loginwindow.sh

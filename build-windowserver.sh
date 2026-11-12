@@ -2,12 +2,12 @@
 # Clone, build and install WindowServer and the GNUstep nextbsd backend.
 # Run as root, after build-core-libs-nextbsd-dispatch.sh.
 #
-#   WindowServer   pkgdemon/apps-windowserver: the display server, its client
+#   WindowServer   nextbsd/apps-windowserver: the display server, its client
 #                  library and test tools.
-#   nextbsd        pkgdemon/libs-back (a fork of libs-back): the GNUstep backend
+#   nextbsd        nextbsd/libs-back (a fork of libs-back): the GNUstep backend
 #                  apps load to talk to WindowServer, installed as
 #                  libgnustep-nextbsd beside the stock X11 libgnustep-back.
-#   loginwindow    pkgdemon/apps-loginwindow: the graphical login. Installing
+#   loginwindow    nextbsd/apps-loginwindow: the graphical login. Installing
 #                  it doesn't enable it; enable-loginwindow.sh does.
 #
 # Commands run one per line rather than joined with &&, because set -e does
@@ -77,11 +77,11 @@ clone_or_pull() {
 
 echo "==> Cloning sources"
 mkdir -p "$SOURCES"
-clone_or_pull https://github.com/pkgdemon/apps-windowserver.git apps-windowserver
+clone_or_pull https://github.com/nextbsd/apps-windowserver.git apps-windowserver
 # A different directory from the stock libs-back clone the core-libs script
 # uses, so the two never mix.
-clone_or_pull https://github.com/pkgdemon/libs-back.git libs-back-nextbsd
-clone_or_pull https://github.com/pkgdemon/apps-loginwindow.git apps-loginwindow
+clone_or_pull https://github.com/nextbsd/libs-back.git libs-back-nextbsd
+clone_or_pull https://github.com/nextbsd/apps-loginwindow.git apps-loginwindow
 
 echo "==> Building WindowServer"
 cd "$SOURCES/apps-windowserver"
