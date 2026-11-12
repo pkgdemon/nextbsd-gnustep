@@ -142,10 +142,10 @@ defaults delete NSGlobalDomain GSBackend
 ### Trying it on the display
 
 1. Quit your X session.
-2. On a text console, as root, run `/usr/libexec/WindowServer/ws-session`. It takes over the screen until you press Ctrl-C. `Ctrl+Alt+Backspace` also stops it, and `Ctrl+Alt+F1` switches to a text console.
+2. On a text console, as root, run `/usr/libexec/WindowServer/ws-session`. It takes over the screen until you press Ctrl-C. `Ctrl+Alt+Backspace` also stops it. There is no switching to other consoles while it runs.
 3. From SSH or another console, as your user, set `GSBackend` as above and start apps with `openapp`.
 
-Terminal, FileViewer and InnerSpace run on it. The Dock and WindowManager.app are X11 programs, so they don't run on WindowServer.
+Terminal, Workspace, InnerSpace and the Dock (DockWM) run on it. WindowManager.app is an X11 program, so it doesn't run on WindowServer.
 
 ### Booting to the login panel
 
@@ -155,7 +155,7 @@ Terminal, FileViewer and InnerSpace run on it. The Dock and WindowManager.app ar
 ./enable-loginwindow.sh
 ```
 
-The login panel replaces the text console straight away, and the machine boots to it from then on. Log in, and your session starts InnerSpace and FileViewer; quitting FileViewer logs you out and brings the panel back. To go back to the text console:
+The login panel replaces the text console straight away, and the machine boots to it from then on. Log in, and your session starts InnerSpace, the Dock and Workspace; quitting Workspace logs you out and brings the panel back. To go back to the text console:
 
 ```sh
 ./disable-loginwindow.sh
