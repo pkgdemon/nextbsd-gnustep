@@ -8,6 +8,40 @@ Scripts that build the GNUstep core libraries on NextBSD, using only NextBSD pac
 
 The libraries are stock upstream sources, from the latest commit on each default branch. Nothing is pinned, so what you build changes as upstream does.
 
+## Install the NextBSD desktop
+
+On a fresh NextBSD install, these steps take you from the text console to the login window. Each is explained further down.
+
+1. As root, install the [packages](#packages), the optional X libraries included (XLibre.app and its `xterm` need them), and clone this repository. Then build the core libraries:
+
+   ```sh
+   ./build-core-libs-nextbsd-dispatch.sh
+   ```
+
+2. As root, build [WindowServer](#windowserver), the `nextbsd` backend and loginwindow:
+
+   ```sh
+   ./build-windowserver.sh
+   ```
+
+3. As your normal user, not root, build and install the desktop apps with `install-apps.sh` from [nextbsd-gnustep-apps](https://github.com/pkgdemon/nextbsd-gnustep-apps#install): the theme, Terminal, Workspace, the Dock, InnerSpace and XLibre.app (it fetches XLibre's X server, `Xnextbsd`, from [apps-xlibre's CI release](https://github.com/nextbsd/apps-xlibre/releases/tag/xnextbsd-latest)):
+
+   ```sh
+   git clone https://github.com/pkgdemon/nextbsd-gnustep-apps.git /private/tmp/nextbsd-gnustep-apps
+   cd /private/tmp/nextbsd-gnustep-apps
+   ./install-apps.sh
+   ```
+
+4. Log out, log in as root, and turn on the [login window](#booting-to-the-login-panel) from this repository's folder:
+
+   ```sh
+   ./enable-loginwindow.sh
+   ```
+
+   The login panel replaces the text console straight away, and the machine boots to it from then on. Log in as your user, and the session starts InnerSpace, the Dock and Workspace.
+
+Step 4 comes last because the login panel takes the console at once, and there is no switching to another console while it's up. If you enable it before step 3, run `install-apps.sh` over SSH, then log out of the desktop (or reboot) and log in again.
+
 ## Packages
 
 Install these first, as root. `git` comes from `NextBSD-toolchain`, so you need it before you can clone this repository.
@@ -90,11 +124,9 @@ The stock script builds libdispatch first, before tools-make.
 
 Sources are cloned into `/Developer/Sources`.
 
-## WindowServer (proof of concept)
+## WindowServer
 
 [WindowServer](https://github.com/nextbsd/apps-windowserver) is a native NextBSD display server, in the style of macOS's. GNUstep apps draw their own windows and WindowServer composites them, with no X11 in between. Apps talk to it through the `nextbsd` backend, which comes from a fork of libs-back, [nextbsd/libs-back](https://github.com/nextbsd/libs-back). It installs as `libgnustep-nextbsd` beside the stock X11 backend, and the `GSBackend` default picks one. libs-base and libs-gui are unchanged.
-
-It's an early proof of concept. Headless mode has been tested; on a real display it hasn't run yet.
 
 ### Build
 
@@ -145,7 +177,7 @@ defaults delete NSGlobalDomain GSBackend
 2. On a text console, as root, run `/usr/libexec/WindowServer/ws-session`. It takes over the screen until you press Ctrl-C. `Ctrl+Alt+Backspace` also stops it. There is no switching to other consoles while it runs.
 3. From SSH or another console, as your user, set `GSBackend` as above and start apps with `openapp`.
 
-Terminal, Workspace, InnerSpace and the Dock (DockWM) run on it. WindowManager.app is an X11 program, so it doesn't run on WindowServer.
+Terminal, Workspace, InnerSpace and the Dock (DockWM) run on it, and so does XLibre.app, which runs X11 programs on it rootless, as XQuartz does on macOS ([apps-xlibre](https://github.com/nextbsd/apps-xlibre)).
 
 ### Booting to the login panel
 
@@ -161,7 +193,7 @@ The login panel replaces the text console straight away, and the machine boots t
 ./disable-loginwindow.sh
 ```
 
-`enable-loginwindow.sh` enables WindowServer's LaunchDaemon with `launchctl load -w`, and copies loginwindow's plist from the app into `/System/Library/LaunchDaemons` and loads it. An installed `org.nextbsd.loginwindow.plist` tells NextBSD that a graphical login owns the console, so getty stays off `ttyv0` and console automatic login stands down. That needs [nextbsd-userland#606](https://github.com/nextbsd/nextbsd-userland/issues/606); until your NextBSD build has it, a text login also starts on `ttyv0`, and the script warns about it.
+`enable-loginwindow.sh` enables WindowServer's LaunchDaemon with `launchctl load -w`, and copies loginwindow's plist from the app into `/System/Library/LaunchDaemons` and loads it. An installed `org.nextbsd.loginwindow.plist` tells NextBSD that a graphical login owns the console, so getty stays off `ttyv0` and console automatic login stands down.
 
 ## Uninstall
 
