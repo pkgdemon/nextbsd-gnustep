@@ -73,6 +73,17 @@ clone_or_pull() {
     url=$1
     dir="$SOURCES/$(basename "$url" .git)"
     if [ -d "$dir/.git" ]; then
+        # A clone made from another URL (stock libs-back before it moved to
+        # NextBSD's fork) follows the new one, and resets to it if their
+        # histories differ.
+        if [ "$(git -C "$dir" remote get-url origin)" != "$url" ]; then
+            git -C "$dir" remote set-url origin "$url"
+            git -C "$dir" fetch origin
+            git -C "$dir" remote set-head origin -a
+            branch=$(git -C "$dir" symbolic-ref --short refs/remotes/origin/HEAD)
+            git -C "$dir" checkout -q -B "${branch#origin/}" "$branch"
+            return
+        fi
         git -C "$dir" fetch origin
         branch=$(git -C "$dir" symbolic-ref --short refs/remotes/origin/HEAD)
         git -C "$dir" checkout -q "${branch#origin/}"
@@ -84,9 +95,13 @@ clone_or_pull() {
 
 echo "==> Cloning sources"
 mkdir -p "$SOURCES"
-for lib in tools-make libobjc2 libs-base libs-corebase libs-gui libs-back libs-av; do
+for lib in tools-make libobjc2 libs-base libs-corebase libs-gui libs-av; do
     clone_or_pull "https://github.com/gnustep/$lib.git"
 done
+# libs-back comes from NextBSD's fork: upstream plus NextBSD fixes (e.g. the
+# gpbs pasteboard crash, nextbsd/libs-back#13). Its WindowServer backend is
+# only built by build-windowserver.sh; this X11 build is the same as stock.
+clone_or_pull https://github.com/nextbsd/libs-back.git
 
 echo "==> Building tools-make"
 cd "$SOURCES/tools-make"

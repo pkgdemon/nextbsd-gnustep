@@ -83,7 +83,7 @@ Built in this order, because each needs the ones before it:
 | libs-base | Foundation |
 | libs-corebase | Core Foundation |
 | libs-gui | AppKit |
-| libs-back | X11 drawing backend, using cairo |
+| libs-back | X11 drawing backend, using cairo, and gpbs. Built from NextBSD's fork, [nextbsd/libs-back](https://github.com/nextbsd/libs-back): upstream plus NextBSD fixes |
 | libs-av | Audio and video, using FFmpeg |
 
 The stock script builds libdispatch first, before tools-make.
