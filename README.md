@@ -145,7 +145,23 @@ defaults delete NSGlobalDomain GSBackend
 2. On a text console, as root, run `/usr/libexec/WindowServer/ws-session`. It takes over the screen until you press Ctrl-C. `Ctrl+Alt+Backspace` also stops it, and `Ctrl+Alt+F1` switches to a text console.
 3. From SSH or another console, as your user, set `GSBackend` as above and start apps with `openapp`.
 
-Terminal has been tested headless. FileViewer hasn't been tried yet. The Dock and WindowManager.app are X11 programs, so they don't run on WindowServer.
+Terminal, FileViewer and InnerSpace run on it. The Dock and WindowManager.app are X11 programs, so they don't run on WindowServer.
+
+### Booting to the login panel
+
+`build-windowserver.sh` also builds [loginwindow](https://github.com/pkgdemon/apps-loginwindow), the graphical login, but doesn't turn it on. As root:
+
+```sh
+./enable-loginwindow.sh
+```
+
+The login panel replaces the text console straight away, and the machine boots to it from then on. Log in, and your session starts InnerSpace and FileViewer; quitting FileViewer logs you out and brings the panel back. To go back to the text console:
+
+```sh
+./disable-loginwindow.sh
+```
+
+`enable-loginwindow.sh` enables WindowServer's LaunchDaemon with `launchctl load -w`, and copies loginwindow's plist from the app into `/System/Library/LaunchDaemons` and loads it. An installed `org.nextbsd.loginwindow.plist` tells NextBSD that a graphical login owns the console, so getty stays off `ttyv0` and console automatic login stands down. That needs [nextbsd-userland#606](https://github.com/nextbsd/nextbsd-userland/issues/606); until your NextBSD build has it, a text login also starts on `ttyv0`, and the script warns about it.
 
 ## Uninstall
 

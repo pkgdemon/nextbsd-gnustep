@@ -17,9 +17,20 @@ fi
 
 if [ -d /usr/lib/system ]; then
     echo "NextBSD system detected. Performing selective uninstall..."
-    # WindowServer's own files sit in folders the base system shares, or
-    # outside /System, so they are removed one by one.
+    # Stop the graphical login first, if it's enabled, so the console comes
+    # back before its files go.
+    for job in org.nextbsd.loginwindow org.nextbsd.WindowServer; do
+        if [ -f "/System/Library/LaunchDaemons/$job.plist" ]; then
+            launchctl unload -w "/System/Library/LaunchDaemons/$job.plist" \
+                2>/dev/null
+        fi
+    done
+    # WindowServer's and loginwindow's own files sit in folders the base
+    # system shares, or outside /System, so they are removed one by one.
     for f in /System/Library/CoreServices/WindowServer \
+        /System/Library/CoreServices/loginwindow.app \
+        /System/Library/LaunchDaemons/org.nextbsd.loginwindow.plist \
+        /etc/pam.d/loginwindow /var/run/loginwindow \
         /System/Library/LaunchDaemons/org.nextbsd.WindowServer.plist \
         /usr/include/WindowServer /usr/libexec/WindowServer \
         /usr/libdata/pkgconfig/WindowServerClient.pc \

@@ -7,6 +7,8 @@
 #   nextbsd        pkgdemon/libs-back (a fork of libs-back): the GNUstep backend
 #                  apps load to talk to WindowServer, installed as
 #                  libgnustep-nextbsd beside the stock X11 libgnustep-back.
+#   loginwindow    pkgdemon/apps-loginwindow: the graphical login. Installing
+#                  it doesn't enable it; enable-loginwindow.sh does.
 #
 # Commands run one per line rather than joined with &&, because set -e does
 # not stop the script when a command other than the last in a && list fails.
@@ -79,6 +81,7 @@ clone_or_pull https://github.com/pkgdemon/apps-windowserver.git apps-windowserve
 # A different directory from the stock libs-back clone the core-libs script
 # uses, so the two never mix.
 clone_or_pull https://github.com/pkgdemon/libs-back.git libs-back-nextbsd
+clone_or_pull https://github.com/pkgdemon/apps-loginwindow.git apps-loginwindow
 
 echo "==> Building WindowServer"
 cd "$SOURCES/apps-windowserver"
@@ -106,8 +109,18 @@ gmake -C Source -j"$CPUS"
 gmake -C Source install
 gmake -C Source clean
 
+echo "==> Building loginwindow"
+cd "$SOURCES/apps-loginwindow"
+gmake -j"$CPUS"
+# The app goes to /System/Library/CoreServices with its LaunchDaemon plist
+# inside it, and the PAM service to /etc/pam.d/loginwindow if there's none.
+gmake install
+gmake clean
+
 echo "==> Done"
 echo "WindowServer:    /System/Library/CoreServices/WindowServer"
 echo "nextbsd backend: /System/Library/Bundles/libgnustep-nextbsd-*.bundle"
+echo "loginwindow:     /System/Library/CoreServices/loginwindow.app"
 echo "Tools:           /usr/libexec/WindowServer (ws-session, wstest, wsctl)"
+echo "To boot to the login panel: ./enable-loginwindow.sh"
 echo "See README.md, \"Trying WindowServer\", for how to start it."
