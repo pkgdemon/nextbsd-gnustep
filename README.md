@@ -90,6 +90,63 @@ The stock script builds libdispatch first, before tools-make.
 
 Sources are cloned into `/Developer/Sources`.
 
+## WindowServer (proof of concept)
+
+[WindowServer](https://github.com/pkgdemon/apps-windowserver) is a native NextBSD display server, in the style of macOS's. GNUstep apps draw their own windows and WindowServer composites them, with no X11 in between. Apps talk to it through the `nextbsd` backend, which comes from a fork of libs-back, [pkgdemon/libs-back](https://github.com/pkgdemon/libs-back). It installs as `libgnustep-nextbsd` beside the stock X11 backend, and the `GSBackend` default picks one. libs-base and libs-gui are unchanged.
+
+It's an early proof of concept. Headless mode has been tested; on a real display it hasn't run yet.
+
+### Build
+
+After `build-core-libs-nextbsd-dispatch.sh`, run this as root:
+
+```sh
+./build-windowserver.sh
+```
+
+It needs NextBSD's Mach-enabled libdispatch, so it won't run on the stock-libdispatch setup. It clones both repositories into `/Developer/Sources`. The fork goes into `libs-back-nextbsd`, apart from the stock `libs-back`. It installs:
+
+| What | Where |
+|---|---|
+| WindowServer | `/System/Library/CoreServices/WindowServer` |
+| `nextbsd` backend | `/System/Library/Bundles/libgnustep-nextbsd-032.bundle` |
+| Client library and headers | `/usr/lib/libWindowServerClient.*`, `/usr/include/WindowServer` |
+| `ws-session`, `wstest`, `wsctl` | `/usr/libexec/WindowServer` |
+| LaunchDaemon (disabled) | `/System/Library/LaunchDaemons/org.nextbsd.WindowServer.plist` |
+
+### Trying it without stopping X
+
+Headless mode draws into memory instead of the screen, so it runs over SSH while X keeps the display. As root:
+
+```sh
+/usr/libexec/WindowServer/ws-session start --headless 1280x800
+```
+
+Then, as your user, point GNUstep apps at it and start one:
+
+```sh
+defaults write NSGlobalDomain GSBackend libgnustep-nextbsd
+openapp Terminal.app &
+/usr/libexec/WindowServer/wsctl list
+/usr/libexec/WindowServer/wsctl snapshot /tmp/screen.ppm
+```
+
+`wsctl` can also click and type into the session: `wsctl click X Y`, `wsctl key a`. Stop the server with `ws-session stop` as root.
+
+`GSBackend` in `NSGlobalDomain` applies to every GNUstep app you start, including in an X session. Remove it when you're done:
+
+```sh
+defaults delete NSGlobalDomain GSBackend
+```
+
+### Trying it on the display
+
+1. Quit your X session.
+2. On a text console, as root, run `/usr/libexec/WindowServer/ws-session`. It takes over the screen until you press Ctrl-C. `Ctrl+Alt+Backspace` also stops it, and `Ctrl+Alt+F1` switches to a text console.
+3. From SSH or another console, as your user, set `GSBackend` as above and start apps with `openapp`.
+
+Terminal has been tested headless. FileViewer hasn't been tried yet. The Dock and WindowManager.app are X11 programs, so they don't run on WindowServer.
+
 ## Uninstall
 
 Run this as root:
@@ -98,7 +155,7 @@ Run this as root:
 ./uninstall-core-libs.sh
 ```
 
-It's a shell version of the `uninstall` target in [gershwin-developer's Makefile](https://github.com/gershwin-desktop/gershwin-developer/blob/main/Makefile). On NextBSD it removes `/System/Applications` and everything in `/System/Library` except `Caches`, `Extensions`, `Filesystems`, `LaunchAgents` and `LaunchDaemons`, which belong to the base system. The Makefile keeps only `Caches`, `Extensions` and `LaunchDaemons`; the other two were added because NextBSD installs into them. It also removes the sources in `/Developer/Sources` and the link-only symlinks in `/Developer/Link`.
+It's a shell version of the `uninstall` target in [gershwin-developer's Makefile](https://github.com/gershwin-desktop/gershwin-developer/blob/main/Makefile). On NextBSD it removes `/System/Applications` and everything in `/System/Library` except `Caches`, `CoreServices`, `Extensions`, `Filesystems`, `LaunchAgents` and `LaunchDaemons`. NextBSD's base packages install into all of those except `Caches`. The Makefile keeps only `Caches`, `Extensions` and `LaunchDaemons`; the other three were added for NextBSD. It also removes WindowServer's files, which sit in those shared folders and in `/usr`. It also removes the sources in `/Developer/Sources` and the link-only symlinks in `/Developer/Link`.
 
 ## Guide
 
