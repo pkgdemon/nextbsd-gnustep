@@ -10,21 +10,31 @@ The libraries are stock upstream sources, from the latest commit on each default
 
 ## Install the NextBSD desktop
 
-On a fresh NextBSD install, these steps take you from the text console to the login window. Each is explained further down.
+On a fresh NextBSD install, these steps take you from the text console to the login window. Run them in this order; each is explained further down.
 
-1. As root, install the [packages](#packages), the optional X libraries included (XLibre.app and its `xterm` need them), and clone this repository. Then build the core libraries:
+1. As root, install the [packages](#packages). `git` comes from `NextBSD-toolchain`, so this comes before cloning. The X libraries are optional, but XLibre.app and its `xterm` need them.
 
    ```sh
+   pkg install -y NextBSD-toolchain NextBSD-mesa NextBSD-gnustep-support
+   pkg install -y NextBSD-xlibre NextBSD-xlibs NextBSD-mesa-x11
+   pkg install -y NextBSD-printing-support   # optional, for printing
+   ```
+
+2. As root, clone this repository and [build](#build) the GNUstep core libraries:
+
+   ```sh
+   git clone https://github.com/pkgdemon/nextbsd-gnustep.git /private/tmp/nextbsd-gnustep
+   cd /private/tmp/nextbsd-gnustep
    ./build-core-libs-nextbsd-dispatch.sh
    ```
 
-2. As root, build [WindowServer](#windowserver), the `nextbsd` backend and loginwindow:
+3. As root, from the same folder, build [WindowServer](#windowserver), the `nextbsd` backend and loginwindow:
 
    ```sh
    ./build-windowserver.sh
    ```
 
-3. As your normal user, not root, build and install the desktop apps with `install-apps.sh` from [nextbsd-gnustep-apps](https://github.com/pkgdemon/nextbsd-gnustep-apps#install): the theme, Terminal, Workspace, the Dock, InnerSpace and XLibre.app (it fetches XLibre's X server, `Xnextbsd`, from [apps-xlibre's CI release](https://github.com/nextbsd/apps-xlibre/releases/tag/xnextbsd-latest)):
+4. As your normal user, not root, build and install the desktop apps with `install-apps.sh` from [nextbsd-gnustep-apps](https://github.com/pkgdemon/nextbsd-gnustep-apps#install): the theme, Terminal, Workspace, the Dock, InnerSpace, XLibre.app and Displays.app. It fetches XLibre's X server, `Xnextbsd`, from [apps-xlibre's CI release](https://github.com/nextbsd/apps-xlibre/releases/tag/xnextbsd-latest). The apps install in `~/Applications`.
 
    ```sh
    git clone https://github.com/pkgdemon/nextbsd-gnustep-apps.git /private/tmp/nextbsd-gnustep-apps
@@ -32,19 +42,22 @@ On a fresh NextBSD install, these steps take you from the text console to the lo
    ./install-apps.sh
    ```
 
-4. Log out, log in as root, and turn on the [login window](#booting-to-the-login-panel) from this repository's folder:
+5. Log out, log in as root, and turn on the [login window](#booting-to-the-login-panel):
 
    ```sh
+   cd /private/tmp/nextbsd-gnustep
    ./enable-loginwindow.sh
    ```
 
    The login panel replaces the text console straight away, and the machine boots to it from then on. Log in as your user, and the session starts InnerSpace, the Dock and Workspace.
 
-Step 4 comes last because the login panel takes the console at once, and there is no switching to another console while it's up. If you enable it before step 3, run `install-apps.sh` over SSH, then log out of the desktop (or reboot) and log in again.
+Only the core libraries, WindowServer (with its backend and tools) and loginwindow install system-wide, in `/System` and `/usr`. The desktop apps stay in each user's `~/Applications` while they are being tested.
+
+Step 5 comes last because the login panel takes the console at once, and there is no switching to another console while it's up. If you enable it before step 4, run `install-apps.sh` over SSH, then log out of the desktop (or reboot) and log in again.
 
 ## Packages
 
-Install these first, as root. `git` comes from `NextBSD-toolchain`, so you need it before you can clone this repository.
+These are the packages from step 1. Install them first, as root. `git` comes from `NextBSD-toolchain`, so you need it before you can clone this repository.
 
 Needed for WindowServer.app development:
 
