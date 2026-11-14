@@ -29,6 +29,8 @@ if [ -d /usr/lib/system ]; then
     # system shares, or outside /System, so they are removed one by one.
     for f in /System/Library/CoreServices/WindowServer \
         /System/Library/CoreServices/loginwindow.app \
+        /System/Library/CoreServices/ScreenCaptureAgent.app \
+        /System/Library/LaunchAgents/org.nextbsd.ScreenCaptureAgent.plist \
         /System/Library/LaunchDaemons/org.nextbsd.loginwindow.plist \
         /etc/pam.d/loginwindow /var/run/loginwindow \
         /System/Library/LaunchDaemons/org.nextbsd.WindowServer.plist \

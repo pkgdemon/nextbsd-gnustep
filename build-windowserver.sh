@@ -3,7 +3,8 @@
 # Run as root, after build-core-libs-nextbsd-dispatch.sh.
 #
 #   WindowServer   nextbsd/apps-windowserver: the display server, its client
-#                  library and test tools.
+#                  library and test tools, and ScreenCaptureAgent, its
+#                  Screen Recording consent agent.
 #   nextbsd        nextbsd/libs-back (a fork of libs-back): the GNUstep backend
 #                  apps load to talk to WindowServer, installed as
 #                  libgnustep-nextbsd beside the stock X11 libgnustep-back.
@@ -89,9 +90,20 @@ gmake -j"$CPUS"
 # Installs the server to /System/Library/CoreServices, the client library and
 # headers to /usr, and the LaunchDaemon, which ships disabled.
 gmake install
-gmake clean
 
 source_gnustep
+
+echo "==> Building ScreenCaptureAgent"
+# WindowServer's Screen Recording consent agent, a GNUstep app, so it builds
+# once GNUstep.sh is sourced. Without it every screen capture waits for
+# consent that never comes (nextbsd/apps-windowserver#76). It links the
+# libWindowServerClient just built, and -lBlocksRuntime through LIBRARY_PATH's
+# $LINKDIR. Installs ScreenCaptureAgent.app to /System/Library/CoreServices
+# and its LaunchAgent to /System/Library/LaunchAgents.
+gmake -j"$CPUS" agent
+gmake install-agent
+# Cleans the agent too, now that GNUstep.sh is sourced.
+gmake clean
 
 echo "==> Building the nextbsd backend"
 cd "$SOURCES/libs-back-nextbsd"
@@ -120,6 +132,7 @@ gmake clean
 echo "==> Done"
 echo "WindowServer:    /System/Library/CoreServices/WindowServer"
 echo "nextbsd backend: /System/Library/Bundles/libgnustep-nextbsd-*.bundle"
+echo "Capture agent:   /System/Library/CoreServices/ScreenCaptureAgent.app"
 echo "loginwindow:     /System/Library/CoreServices/loginwindow.app"
 echo "Tools:           /usr/libexec/WindowServer (ws-session, wstest, wsctl)"
 echo "To boot to the login panel: ./enable-loginwindow.sh"

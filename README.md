@@ -157,6 +157,8 @@ It needs NextBSD's Mach-enabled libdispatch, so it won't run on the stock-libdis
 | `nextbsd` backend | `/System/Library/Bundles/libgnustep-nextbsd-032.bundle` |
 | Client library and headers | `/usr/lib/libWindowServerClient.*`, `/usr/include/WindowServer` |
 | `ws-session`, `wstest`, `wsctl` | `/usr/libexec/WindowServer` |
+| ScreenCaptureAgent, the Screen Recording consent agent | `/System/Library/CoreServices/ScreenCaptureAgent.app` |
+| Its LaunchAgent | `/System/Library/LaunchAgents/org.nextbsd.ScreenCaptureAgent.plist` |
 | LaunchDaemon (disabled) | `/System/Library/LaunchDaemons/org.nextbsd.WindowServer.plist` |
 
 ### Trying it without stopping X
