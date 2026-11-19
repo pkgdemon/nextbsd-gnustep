@@ -192,7 +192,7 @@ defaults delete NSGlobalDomain GSBackend
 2. On a text console, as root, run `/usr/libexec/WindowServer/ws-session`. It takes over the screen until you press Ctrl-C. `Ctrl+Alt+Backspace` also stops it. There is no switching to other consoles while it runs.
 3. From SSH or another console, as your user, set `GSBackend` as above and start apps with `openapp`.
 
-Terminal, Workspace, InnerSpace and the Dock (DockWM) run on it, and so does XLibre.app, which runs X11 programs on it rootless, as XQuartz does on macOS ([apps-xlibre](https://github.com/nextbsd/apps-xlibre)).
+Terminal, Workspace, InnerSpace and the Dock (Dock.app, formerly DockWM.app) run on it, and so does XLibre.app, which runs X11 programs on it rootless, as XQuartz does on macOS ([apps-xlibre](https://github.com/nextbsd/apps-xlibre)).
 
 ### Booting to the login panel
 
