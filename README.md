@@ -55,6 +55,8 @@ Only the core libraries, WindowServer (with its backend and tools) and loginwind
 
 Step 5 comes last because the login panel takes the console at once, and there is no switching to another console while it's up. If you enable it before step 4, run `install-apps.sh` over SSH, then log out of the desktop (or reboot) and log in again.
 
+On a Dell laptop, if closing the lid does nothing (WindowServer never logs "lid closed", and `sysctl dev.acpi_lid.0.state` stays `1`), check the BIOS: **Power Management → Enable Lid Switch**. Dell ships it off on some models, the XPS 13 Plus 9320 among them, and while it's off the firmware never tells any operating system about the lid ([nextbsd/nextbsd#646](https://github.com/nextbsd/nextbsd/issues/646)).
+
 ## Packages
 
 These are the packages from step 1. Install them first, as root. `git` comes from `NextBSD-toolchain`, so you need it before you can clone this repository.
