@@ -95,13 +95,17 @@ clone_or_pull() {
 
 echo "==> Cloning sources"
 mkdir -p "$SOURCES"
-for lib in tools-make libobjc2 libs-base libs-corebase libs-gui libs-av; do
+for lib in tools-make libobjc2 libs-base libs-corebase libs-av; do
     clone_or_pull "https://github.com/gnustep/$lib.git"
 done
 # libs-back comes from NextBSD's fork: upstream plus NextBSD fixes (e.g. the
 # gpbs pasteboard crash, nextbsd/libs-back#13). Its WindowServer backend is
 # only built by build-windowserver.sh; this X11 build is the same as stock.
 clone_or_pull https://github.com/nextbsd/libs-back.git
+# libs-gui comes from NextBSD's fork too: upstream, with the speech server
+# installed in /System/Library/CoreServices, where NSSpeechSynthesizer starts
+# it, instead of /System/Applications (nextbsd/libs-gui#1).
+clone_or_pull https://github.com/nextbsd/libs-gui.git
 
 echo "==> Building tools-make"
 cd "$SOURCES/tools-make"
@@ -164,6 +168,9 @@ echo "==> Building libs-gui"
 cd "$SOURCES/libs-gui"
 ./configure $BUILD_FLAG CPPFLAGS="$ICU_CFLAGS"
 make_install
+# An older build put the speech server in /System/Applications, where it
+# showed as an app that does nothing; it's in CoreServices now.
+rm -rf /System/Applications/GSSpeechServer.app
 
 echo "==> Building libs-back"
 cd "$SOURCES/libs-back"
