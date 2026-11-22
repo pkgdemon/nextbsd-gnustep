@@ -162,8 +162,13 @@ make_install CPPFLAGS="-I/System/Library/Headers $ICU_CFLAGS"
 
 echo "==> Building libs-gui"
 cd "$SOURCES/libs-gui"
-./configure $BUILD_FLAG CPPFLAGS="$ICU_CFLAGS"
+# No speech servers: GSSpeechServer.app isn't an app anyone opens, and it
+# sat alone in /System/Applications. Take out one an earlier run installed.
+./configure $BUILD_FLAG CPPFLAGS="$ICU_CFLAGS" \
+    --disable-speech --disable-speech-recognizer
 make_install
+rm -rf /System/Applications/GSSpeechServer.app \
+    /System/Applications/GSSpeechRecognitionServer.app
 
 echo "==> Building libs-back"
 cd "$SOURCES/libs-back"
