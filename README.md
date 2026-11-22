@@ -131,7 +131,7 @@ Built in this order, because each needs the ones before it:
 | libobjc2 | Objective-C runtime |
 | libs-base | Foundation |
 | libs-corebase | Core Foundation |
-| libs-gui | AppKit |
+| libs-gui | AppKit. Built from NextBSD's fork, [nextbsd/libs-gui](https://github.com/nextbsd/libs-gui): upstream, with the speech server (`GSSpeechServer.app`) installed in `/System/Library/CoreServices` instead of `/System/Applications`. `say` speaks through it |
 | libs-back | X11 drawing backend, using cairo, and gpbs. Built from NextBSD's fork, [nextbsd/libs-back](https://github.com/nextbsd/libs-back): upstream plus NextBSD fixes |
 | libs-av | Audio and video, using FFmpeg |
 
@@ -141,7 +141,7 @@ Sources are cloned into `/Developer/Sources`.
 
 ## WindowServer
 
-[WindowServer](https://github.com/nextbsd/apps-windowserver) is a native NextBSD display server, in the style of macOS's. GNUstep apps draw their own windows and WindowServer composites them, with no X11 in between. Apps talk to it through the `nextbsd` backend, which comes from a fork of libs-back, [nextbsd/libs-back](https://github.com/nextbsd/libs-back). It installs as `libgnustep-nextbsd` beside the stock X11 backend, and the `GSBackend` default picks one. libs-base and libs-gui are unchanged.
+[WindowServer](https://github.com/nextbsd/apps-windowserver) is a native NextBSD display server, in the style of macOS's. GNUstep apps draw their own windows and WindowServer composites them, with no X11 in between. Apps talk to it through the `nextbsd` backend, which comes from a fork of libs-back, [nextbsd/libs-back](https://github.com/nextbsd/libs-back). It installs as `libgnustep-nextbsd` beside the stock X11 backend, and the `GSBackend` default picks one. libs-base is unchanged.
 
 ### Build
 
